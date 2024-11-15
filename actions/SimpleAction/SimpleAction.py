@@ -6,6 +6,7 @@ from src.backend.PluginManager.PluginBase import PluginBase
 
 # Import python modules
 import os
+import json
 # import websockets
 
 # Import gtk modules - used for the config rows
@@ -25,8 +26,8 @@ class SimpleAction(ActionBase):
 
     def on_key_down(self) -> None:
         print("Key down")
-        # self.plugin_base.testert()
-        # self.plugin_base.backend.init_streamdeck()
+        message = {"id":"StreamControllerConnected"}
+        self.plugin_base.parse_message(message)
 
     def on_key_up(self) -> None:
         print("Key up")
