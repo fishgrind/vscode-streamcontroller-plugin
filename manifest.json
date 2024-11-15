@@ -1,0 +1,19 @@
+{
+    "version": "1.0.0",
+    "thumbnail": "store/Thumbnail.png",
+    "id": "com_fishgrind_vscode",
+    "name": "VSCode",
+    "descriptions": {
+        "en_US": "Control VSCode with Streamcontroller"
+    },
+    "short-descriptions": {
+        "en_US": "Control VSCode"
+    },
+    "tags": [
+        "VSCode"
+    ],
+    "minimum-app-version": "1.0.0",
+    "app-version": "1.4.11-beta",
+    "description": "Control VSCode with Streamcontroller",
+    "short-description": "Control VSCode"
+}
