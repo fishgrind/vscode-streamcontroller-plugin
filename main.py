@@ -21,7 +21,7 @@ class VSCode(PluginBase):
         super().__init__()
 
         # Launch backend
-        self.launch_backend(os.path.join(self.PATH, "backend", "backend.py"), os.path.join(self.PATH, "backend", ".venv"), open_in_terminal=True)
+        self.launch_backend(os.path.join(self.PATH, "backend", "backend.py"), os.path.join(self.PATH, "backend", ".venv"), open_in_terminal=False)
 
 
         ## Register actions
@@ -41,14 +41,14 @@ class VSCode(PluginBase):
             app_version = "1.1.1-alpha"
         )
 
-    def parse_message(self, message):
-        host = "127.0.0.1"
-        port = "48969"
-        ws_uri = "ws://{host}:{port}".format(host=host, port=port)
-        message = json.dumps(message)
+    # def parse_message(self, message):
+    #     host = "127.0.0.1"
+    #     port = "48969"
+    #     ws_uri = "ws://{host}:{port}".format(host=host, port=port)
+    #     message = json.dumps(message)
 
-        try:
-            return self.backend.send_message(ws_uri, message)
-        except Exception as e:
-            log.error(e)
-            return False
+    #     try:
+    #         return self.backend.send_message(ws_uri, message)
+    #     except Exception as e:
+    #         log.error(e)
+    #         return False

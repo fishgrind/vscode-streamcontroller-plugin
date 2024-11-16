@@ -7,6 +7,7 @@ from src.backend.PluginManager.PluginBase import PluginBase
 # Import python modules
 import os
 import json
+from loguru import logger as log
 # import websockets
 
 # Import gtk modules - used for the config rows
@@ -22,12 +23,22 @@ class SimpleAction(ActionBase):
     def on_ready(self) -> None:
         icon_path = os.path.join(self.plugin_base.PATH, "assets", "info.png")
         self.set_media(media_path=icon_path, size=0.75)
-        # self.plugin_base.backend.init_streamdeck()
 
     def on_key_down(self) -> None:
-        print("Key down")
-        message = {"id":"StreamControllerConnected"}
-        self.plugin_base.parse_message(message)
+        vscommand = {"id":"StreamControllerConnected"}
+        self.prepare_command(vscommand)
 
     def on_key_up(self) -> None:
         print("Key up")
+
+    def prepare_command(self, vscommand):
+        host = "127.0.0.1"
+        port = "48969"
+        ws_uri = "ws://{host}:{port}".format(host=host, port=port)
+        vscommand = json.dumps(vscommand)
+
+        try:
+            return self.plugin_base.backend.queue_command(ws_uri, vscommand)
+        except Exception as e:
+            log.error(e)
+            return False
