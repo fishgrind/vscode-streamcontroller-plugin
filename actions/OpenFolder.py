@@ -14,7 +14,7 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Gtk, Adw
 
-class ChangeLanguage(ActionBase):
+class OpenFolder(ActionBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -25,26 +25,27 @@ class ChangeLanguage(ActionBase):
     def on_key_down(self) -> None:
         settings = self.get_settings()
         vscommand = {
-            "id": "ChangeLanguageMessage",
+            "id": "OpenFolderMessage",
             "data":{
-                "languageId":settings.get("language_mode_value")
+                "path":settings.get("open_folder_path_value").replace('/', '//'),
+                "newWindow": True
                 }
             }
         self.prepare_command(vscommand)
 
     def get_config_rows(self) -> list:
-        self.language_mode = Adw.EntryRow(title="Language Mode")
+        self.open_folder_path = Adw.EntryRow(title="Folder Path")
         self.load_config_defaults()
-        self.language_mode.connect("notify::text", self.on_language_mode_changed)
-        return [self.language_mode]
+        self.open_folder_path.connect("notify::text", self.on_open_folder_path_changed)
+        return [self.open_folder_path]
 
     def load_config_defaults(self):
         settings = self.get_settings()
-        self.language_mode.set_text(settings.get("language_mode_value", "")) # Does not accept None
+        self.open_folder_path.set_text(settings.get("open_folder_path_value", "")) # Does not accept None
 
-    def on_language_mode_changed(self, entry, *args):
+    def on_open_folder_path_changed(self, entry, *args):
         settings = self.get_settings()
-        settings["language_mode_value"] = entry.get_text()
+        settings["open_folder_path_value"] = entry.get_text()
         self.set_settings(settings)
 
     def prepare_command(self, vscommand):

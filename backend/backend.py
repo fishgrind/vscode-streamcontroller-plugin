@@ -37,28 +37,34 @@ class WebSocketServer:
     def __init__(self):
         self.host = "127.0.0.1"
         self.port = "48969"
-        self.clients = set()
+        self.activeClient = set()
+        self.allClients = set()
 
     async def echo(self, websocket):
-        # self.clients.add(websocket)
+        self.allClients.add(websocket)
         async for message in websocket:
             try:
                 msg = json.loads(message) #read the data
 
                 if msg["id"] == "ChangeActiveSessionMessage":
                     #make sure the right vscode session receives the data
-                    self.clients.clear()
-                    self.clients.add(websocket)
+                    self.activeClient.clear()
+                    self.activeClient.add(websocket)
+
+                    data = msg
+                    data["id"] = "ActiveSessionChangedMessage"
+                    websockets.broadcast(self.allClients,json.dumps(data))
+
                 elif msg["id"] == "StreamControllerConnected":
                     print("streamcontroller connected")
                 else:
                     data = msg
                     data["data"] = json.dumps(msg["data"])
-                    websockets.broadcast(self.clients,json.dumps(data))
+                    websockets.broadcast(self.activeClient,json.dumps(data))
             except websockets.exceptions.ConnectionClosed:
                 pass
             # finally:
-                # self.clients.remove(websocket)
+                # self.activeClient.remove(websocket)
 
     async def start(self):
         async with websockets.serve(self.echo, self.host, self.port):

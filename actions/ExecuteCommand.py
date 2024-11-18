@@ -14,7 +14,7 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Gtk, Adw
 
-class ChangeLanguage(ActionBase):
+class ExecuteCommand(ActionBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -25,26 +25,27 @@ class ChangeLanguage(ActionBase):
     def on_key_down(self) -> None:
         settings = self.get_settings()
         vscommand = {
-            "id": "ChangeLanguageMessage",
+            "id": "ExecuteCommandMessage",
             "data":{
-                "languageId":settings.get("language_mode_value")
+                "command":settings.get("execute_command_value"),
+                "arguments":"{}"
                 }
             }
         self.prepare_command(vscommand)
 
     def get_config_rows(self) -> list:
-        self.language_mode = Adw.EntryRow(title="Language Mode")
+        self.execute_command = Adw.EntryRow(title="Command ID")
         self.load_config_defaults()
-        self.language_mode.connect("notify::text", self.on_language_mode_changed)
-        return [self.language_mode]
+        self.execute_command.connect("notify::text", self.on_execute_command_changed)
+        return [self.execute_command]
 
     def load_config_defaults(self):
         settings = self.get_settings()
-        self.language_mode.set_text(settings.get("language_mode_value", "")) # Does not accept None
+        self.execute_command.set_text(settings.get("execute_command_value", "")) # Does not accept None
 
-    def on_language_mode_changed(self, entry, *args):
+    def on_execute_command_changed(self, entry, *args):
         settings = self.get_settings()
-        settings["language_mode_value"] = entry.get_text()
+        settings["execute_command_value"] = entry.get_text()
         self.set_settings(settings)
 
     def prepare_command(self, vscommand):

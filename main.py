@@ -7,6 +7,10 @@ from src.backend.DeckManagement.InputIdentifier import Input
 
 # Import actions
 from .actions.ChangeLanguage import ChangeLanguage
+from .actions.ExecuteCommand import ExecuteCommand
+from .actions.ExecuteTerminalCommand import ExecuteTerminalCommand
+from .actions.InsertSnippet import InsertSnippet
+from .actions.OpenFolder import OpenFolder
 
 import os
 import sys
@@ -37,6 +41,58 @@ class VSCode(PluginBase):
             }
         )
         self.add_action_holder(self.changeLanguage_holder)
+
+        self.executeCommand_holder = ActionHolder(
+            plugin_base = self,
+            action_base = ExecuteCommand,
+            action_id = "com_fishgrind_vscode::ExecuteCommand",
+            action_name = "Execute a VSCode command",
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.executeCommand_holder)
+
+        self.executeTerminalCommand_holder = ActionHolder(
+            plugin_base = self,
+            action_base = ExecuteTerminalCommand,
+            action_id = "com_fishgrind_vscode::ExecuteTerminalCommand",
+            action_name = "Execute a Terminal command in VSCode",
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.executeTerminalCommand_holder)
+
+        self.insertSnippet_holder = ActionHolder(
+            plugin_base = self,
+            action_base = InsertSnippet,
+            action_id = "com_fishgrind_vscode::InsertSnippet",
+            action_name = "Insert Code Snippet in VSCode",
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.insertSnippet_holder)
+
+        self.openFolder_holder = ActionHolder(
+            plugin_base = self,
+            action_base = OpenFolder,
+            action_id = "com_fishgrind_vscode::OpenFolder",
+            action_name = "Open new editor in VSCode",
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED
+            }
+        )
+        self.add_action_holder(self.openFolder_holder)
 
         # Register plugin
         self.register(
