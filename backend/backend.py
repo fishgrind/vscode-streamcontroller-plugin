@@ -18,12 +18,16 @@ class Backend(BackendBase):
 
 
     #receiving commands
-    def queue_command(self, ws_uri, vscommand):
+    def queue_command(self, vscommand):
+        host = "127.0.0.1"
+        port = "48969"
+        ws_uri = "ws://{host}:{port}".format(host=host, port=port)
         self.thread.run_until_complete(self.push_command(ws_uri, vscommand))
 
     async def push_command(self, ws_uri, vscommand):
         async with websockets.connect(ws_uri) as websocket:
             await websocket.send(vscommand)
+            websocket.close
             return True
 
 backend = Backend()
